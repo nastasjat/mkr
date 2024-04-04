@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { StudentsService } from '../services/students.service';
 
 @Component({
   selector: 'app-home',
@@ -7,6 +8,22 @@ import { Component } from '@angular/core';
 })
 export class HomePage {
 
-  constructor() {}
+  results: { year: number; totalStudents: number; }[] = [];
+  constructor(private calculationService: StudentsService) { }
 
+  onCoursesSubmitted(event: any) {
+    const courses: { year: number, groups: number[] }[] = event;
+
+    if (!courses || courses.length === 0) {
+      console.log('Некоректні дані курсів');
+    }
+
+    for (const course of courses) {
+      if (!course.groups || course.groups.length === 0) {
+        console.log('Некоректні дані курсів');
+      }
+    }
+    
+    this.results = this.calculationService.calculateTotalStudents(courses);
+  }
 }
